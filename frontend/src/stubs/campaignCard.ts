@@ -16,6 +16,7 @@ export const campaignsStub = [
     commitment: [],
     start: '2021-09-01',
     end: '2021-12-31',
+    image: '/rainforest.jpg'
   },
   {
     charity: 'Ocean Rescue',
@@ -27,6 +28,7 @@ export const campaignsStub = [
     commitment: [],
     start: '2021-09-01',
     end: '2021-12-31',
+    image: '/ocean.jpg'
   },
   {
     charity: 'Educate Every Child',
@@ -37,6 +39,7 @@ export const campaignsStub = [
     commitment: [],
     start: '2021-09-01',
     end: '2021-12-31',
+    image: '/children.jpg'
   },
   {
     charity: 'Homeless Heroes',
@@ -47,5 +50,6 @@ export const campaignsStub = [
     commitment: [],
     start: '2021-09-01',
     end: '2021-12-31',
+    image: '/homeless.jpg'
   }
 ];

@@ -15,7 +15,6 @@ interface CharityCardProps {
   description: string;
   currentAmount: number;
   targetAmount: number;
-  slug: string;
 }
 
 const CharityCard: React.FC<CharityCardProps> = ({

@@ -17,6 +17,7 @@ interface CampaignProps {
     charity: string;
     start: string;
     end: string;
+    image: string;
   };
 }
 
@@ -41,7 +42,7 @@ const CampaignPage: React.FC<CampaignProps> = ({ campaign }) => {
         <h1 className="text-4xl font-bold mb-4">{campaign.title}</h1>
         <div className="mb-4">
           <img
-            src="/box.jpg" // Replace with the actual image path
+            src={campaign.image} // Replace with the actual image path
             alt="Campaign Image"
             className="w-2/3 h-auto rounded-md"
           />
