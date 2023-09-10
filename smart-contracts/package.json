@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@nomiclabs/hardhat-etherscan": "^3.1.7",
-    "@openzeppelin/contracts": "^4.9.3"
+    "@openzeppelin/contracts": "^4.9.3",
+    "ethers": "^6.7.1"
   }
 }
