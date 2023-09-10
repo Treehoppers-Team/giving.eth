@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { Inter } from 'next/font/google';
 import { ReactNode } from 'react';
+import Navbar from './Navbar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -9,7 +10,12 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  return <div className={`flex p-24 ${inter.className}`}>{children}</div>;
+  return (
+    <div className={`flex p-24 flex-col ${inter.className}`}>
+      <Navbar />
+      <div className="flex">{children}</div>
+    </div>
+  );
 };
 
 export default Layout;
