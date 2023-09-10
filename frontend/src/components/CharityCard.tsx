@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router'; // Import useRouter from Next.js
 import {
   Card,
   CardContent,
@@ -11,33 +12,46 @@ import { Progress } from './ui/progress';
 
 interface CharityCardProps {
   title: string;
-  preview: string;
-  fundedAmount: number;
-  goalAmount: number;
+  description: string;
+  currentAmount: number;
+  targetAmount: number;
+  slug: string;
 }
 
 const CharityCard: React.FC<CharityCardProps> = ({
   title,
-  preview,
-  fundedAmount,
-  goalAmount,
+  description,
+  currentAmount,
+  targetAmount,
 }) => {
-  const progressValue = (fundedAmount / goalAmount) * 100;
+  const progressValue = (currentAmount / targetAmount) * 100;
+  
+  const router = useRouter(); // Initialize the useRouter hook
+  const slug = title.replace(/\s+/g, "-").toLowerCase()
+
+  const handleCardClick = () => {
+    // Programmatically navigate to the donor page
+    router.push(`/donate/${slug}`);
+  };
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{preview}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p className="text-gray-400 font-semibold text-xs">
-          {fundedAmount} / {goalAmount} funded
-        </p>
-      </CardContent>
-      <CardFooter>
-        <Progress value={progressValue} />
-      </CardFooter>
-    </Card>
+    // Add an onClick event to the Card div to handle the click event
+    <div onClick={handleCardClick} style={{ cursor: 'pointer' }}>
+      <Card>
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-gray-400 font-semibold text-xs">
+            {currentAmount} / {targetAmount} funded
+          </p>
+        </CardContent>
+        <CardFooter>
+          <Progress value={progressValue} />
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
 

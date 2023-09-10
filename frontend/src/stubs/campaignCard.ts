@@ -7,31 +7,45 @@ export interface CampaignCardProps {
 
 export const campaignsStub = [
   {
+    charity: 'Save the Rainforest',
     title: 'Rainforest Protection Initiative',
-    preview:
+    description:
       'Support us in our endeavor to protect the rainforests and preserve biodiversity.',
-    fundedAmount: 150000,
-    goalAmount: 500000,
+    currentAmount: 150000,
+    targetAmount: 500000,
+    commitment: [],
+    start: '2021-09-01',
+    end: '2021-12-31',
   },
   {
+    charity: 'Ocean Rescue',
     title: 'Clean Oceans Campaign',
-    preview:
+    description:
       'Join our campaign to clean the oceans and save marine life from plastic pollution.',
-    fundedAmount: 300000,
-    goalAmount: 1000000,
+    currentAmount: 300000,
+    targetAmount: 1000000,
+    commitment: [],
+    start: '2021-09-01',
+    end: '2021-12-31',
   },
   {
+    charity: 'Educate Every Child',
     title: 'Educate Every Child',
-    preview:
-      'Help us provide quality education to every child, regardless of their socioeconomic background.',
-    fundedAmount: 75000,
-    goalAmount: 250000,
+    description: 'Help us provide quality education to every child, regardless of their socioeconomic background.',
+    currentAmount: 75000,
+    targetAmount: 250000,
+    commitment: [],
+    start: '2021-09-01',
+    end: '2021-12-31',
   },
   {
+    charity: 'Homeless Heroes',
     title: 'Homeless Shelter Support',
-    preview:
-      'Contribute to our mission of providing shelter and basic amenities to homeless individuals.',
-    fundedAmount: 50000,
-    goalAmount: 200000,
-  },
+    description: 'Contribute to our mission of providing shelter and basic amenities to homeless individuals.',
+    currentAmount: 50000,
+    targetAmount: 200000,
+    commitment: [],
+    start: '2021-09-01',
+    end: '2021-12-31',
+  }
 ];

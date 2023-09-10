@@ -12,12 +12,12 @@ const ExploreCampaignsSegment = () => {
     <div className="flex flex-col space-y-3">
       <h1 className="font-bold text-4xl">Explore Campaigns</h1>
       <div className="flex space-x-4">
-        {campaignsStub.map(({ title, preview, fundedAmount, goalAmount }) => (
+        {campaignsStub.map(({ title, description, currentAmount, targetAmount }) => (
           <CharityCard
             title={title}
-            preview={preview}
-            fundedAmount={fundedAmount}
-            goalAmount={goalAmount}
+            description={description}
+            currentAmount={currentAmount}
+            targetAmount={targetAmount}
           />
         ))}
       </div>
