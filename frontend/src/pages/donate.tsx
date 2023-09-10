@@ -7,13 +7,14 @@ export default function Home() {
   return (
     <Layout>
       {/* Left Side */}
-      <div className="w-2/3 p-6">
+      
+      <div className="w-2/3 p-6 mt-8">
         <h1 className="text-4xl font-bold mb-4">Left Aligned Title</h1>
         <div className="mb-4">
           <img
-            src="/your-image.jpg" // Replace with the actual image path
+            src="/box.jpg" // Replace with the actual image path
             alt="Your Image"
-            className="w-full h-auto"
+            className="w-2/3 h-auto rounded-md"
           />
         </div>
         <div className="mb-4">
@@ -32,7 +33,7 @@ export default function Home() {
       </div>
 
       {/* Right Side */}
-      <div className="w-1/3 p-6">
+      <div className="w-1/3 p-6 mt-8">
         <Progress value={33} className="mb-4" />
 
         <div className="mb-4">
