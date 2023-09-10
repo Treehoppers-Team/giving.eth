@@ -5,34 +5,31 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 const hre = require("hardhat");
-require("dotenv").config({ path: ".env" });
-
-// Env variables
-const QUICKNODE_HTTP_URL = process.env.QUICKNODE_HTTP_URL;
-const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY;
-const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+  const [deployer] = await hre.ethers.getSigners();
 
-  const lockedAmount = hre.ethers.parseEther("0.001");
+  // Replace with the address of the EntryPoint contract you want to use
+  const entryPointAddress = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 
-  const lock = await hre.ethers.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
+  // Replace with the amount of ether you want to send along with deployment
+
+
+  const SimpleAccount = await hre.ethers.deployContract("SimpleAccount",[entryPointAddress]);
+  // const simpleAccount = await SimpleAccount.deploy(entryPointAddress);
+
+  await SimpleAccount.waitForDeployment();
+
+  console.log(`SimpleAccount deployed to: ${SimpleAccount.target}`);
+}
+
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
   });
 
-  await lock.waitForDeployment();
-
-  console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
-  );
-
-  const simpleAccount = await hre.ethers.deployContract("SimpleAccount", ["0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789"]);
-  
-}
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
