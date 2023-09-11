@@ -12,7 +12,9 @@ import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
-import Link from 'next/link';
+
+import { signIn } from 'next-auth/react';
+import { createUser } from '@/lib/api';
 
 import {
   Form,
@@ -24,6 +26,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import Link from 'next/link';
 
 const formSchema = z.object({
   email: z.string().nonempty({ message: 'Email is required' }),
@@ -40,11 +43,10 @@ const LoginModalForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  const handleSignIn = () => {
+    const result = signIn('google');
+    console.log('SIGN IN RESULT', result);
+  };
 
   return (
     <Dialog>
@@ -53,58 +55,9 @@ const LoginModalForm = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader className="space-y-4">
-          <DialogTitle className="text-2xl font-bold">Login</DialogTitle>
+          <DialogTitle>Login</DialogTitle>
           <DialogDescription>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8"
-              >
-                <div className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input placeholder="fred@perry.com" {...field} />
-                        </FormControl>
-                        {/* <FormDescription>
-                        This is your public display name.
-                      </FormDescription> */}
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input type="password" {...field} />
-                        </FormControl>
-                        {/* <FormDescription>
-                        This is your public display name.
-                      </FormDescription> */}
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <Button type="submit" disabled={!form.formState.isValid}>
-                  Submit
-                </Button>
-                <div>
-                  Don't have an account yet?{' '}
-                  <Link href="/register">
-                    <Button variant="link">Sign Up</Button>
-                  </Link>
-                </div>
-              </form>
-            </Form>
+            <Button onClick={handleSignIn}>Sign In With Google</Button>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

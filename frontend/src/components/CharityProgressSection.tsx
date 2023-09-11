@@ -12,7 +12,7 @@ interface CharityProgressSectionProps {
   charity: string;
 }
 
-const submitTransaction = async () => {
+const submitDefaultTransaction = async () => {
   try {
 
     const web3 = new Web3(window.ethereum);
@@ -25,12 +25,21 @@ const submitTransaction = async () => {
       console.log("Sender Address:", senderAddress);
 
       // Recipient's address (null address)
-      const response = await fetch('/api/blockchain')
+      const response = await fetch('/api/donate?id=5XUCEe0GNc1rxTNAtNCP')
       const recipientAddress = await response.json()
       console.log("Recipient Address:", recipientAddress);
 
       // Amount to transfer (0.000001 MATIC in Wei)
       const amountInWei = web3.utils.toWei("0.000000000000000001", "ether");
+
+      const senderBalance = await web3.eth.getBalance(senderAddress);
+      const balanceInWei = web3.utils.fromWei(senderBalance, 'ether')
+      console.log("Sender's Balance: ", balanceInWei)
+
+      const networkId = await web3.eth.getChainId();
+      console.log("Chain ID: ", networkId)
+
+      const gasLimit = 100000;
 
       // Create a transaction object
       const transactionObject = {
@@ -38,6 +47,7 @@ const submitTransaction = async () => {
         to: recipientAddress,
         value: amountInWei,
         chainId: 80001,
+        gas: gasLimit
       };
 
       console.log("Transaction Object:", transactionObject);
@@ -53,6 +63,10 @@ const submitTransaction = async () => {
     console.error("Error sending transaction:", error);
   }
 };
+
+const submitTransferTransaction = async () => {
+  
+}
 
 const CharityProgressSection: React.FC<CharityProgressSectionProps> = ({
   progressValue,
@@ -78,7 +92,7 @@ const CharityProgressSection: React.FC<CharityProgressSectionProps> = ({
         <p className="text-gray-600">{charity}</p>
       </section>
       <section className="mb-4">
-        <Button onClick={submitTransaction}>Donate Now!</Button>
+        <Button onClick={submitDefaultTransaction}>Donate Now!</Button>
       </section>
     </section>
   );

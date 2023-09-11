@@ -57,8 +57,8 @@ const index = () => {
       uen: '',
       name: '',
       category: '',
-      email: '',
-      password: '',
+      // email: '',
+      // password: '',
       // confirmPassword: '',
     },
     mode: 'all',
@@ -74,7 +74,7 @@ const index = () => {
     <Layout>
       <div className="pt-16 w-full flex justify-center">
         <div className="flex flex-col gap-4 w-[45vh]">
-          <h1 className="text-4xl font-bold mb-4">Charity Sign Up</h1>
+          <h1 className="text-4xl font-bold mb-4">Complete KYC</h1>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
               <div className="space-y-4">
@@ -174,7 +174,7 @@ const index = () => {
                   )}
                 />
 
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
@@ -203,7 +203,7 @@ const index = () => {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
                 {/* <FormField
                   control={form.control}
                   name="confirmPassword"

@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from "ethers";
-import { campaignAccountFactoryABI, campaignAccountABI } from "../../abis/abi"
+import { campaignAccountFactoryABI, campaignAccountABI, erc20ABI } from "../../abis/abi"
 import { getFirestore } from "firebase/firestore";
 import firebaseApp from "../../../firebaseConfig"
 import { NextApiRequest, NextApiResponse } from "next";
@@ -13,7 +13,7 @@ export default async function handler(
   ) {
     try {
         if (req.method === "GET") {
-          const response = await getAddress("0x9c34Da6D6B50D1f0271699798a1DD1C053Db30d1", "0x567dcbCC0Ded4Bd654485ba4675D5c27BfEB6F36", BigInt(1), ['0x567dcbCC0Ded4Bd654485ba4675D5c27BfEB6F36']);
+          const response = await buildAndSignOp("1","0x6cEc6CF0f543dfE6376E6628C785d40f8e80F4B7","0x567dcbCC0Ded4Bd654485ba4675D5c27BfEB6F36","0x9c34Da6D6B50D1f0271699798a1DD1C053Db30d1","0x9999f7Fea5938fD3b1E26A12c3f2fb024e194f97", BigNumber.from(0),BigNumber.from(0),["0x567dcbCC0Ded4Bd654485ba4675D5c27BfEB6F36"]);
           res.status(200).json(response);
       } 
     }catch (error) {
@@ -48,9 +48,11 @@ async function buildAndSignOp(
   target: string,
   value: BigNumber,
   nonce: BigNumber,
-  targetData: Uint8Array,
   suppliers: string[],
 ): Promise<UserOperation> {
+  const erc20Interface = new ethers.utils.Interface(erc20ABI);
+  const targetData = buildCallData(erc20Interface, "transfer",sender,1)
+
   const op = buildOp(
     stringToBigInt(salt),
     sender,
@@ -62,7 +64,7 @@ async function buildAndSignOp(
     targetData,
     suppliers
   );
-  const opHash = getUserOpHash(op, "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789", BigNumber.from(5));
+  const opHash = getUserOpHash(op, "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789", BigNumber.from(80001));
   console.log("Op Hash:", opHash.toString());
 
   const signingPkey = process.env.SIGNING_PKEY;
@@ -81,8 +83,7 @@ function stringToBigInt(str: string): BigNumber {
 }
 
 async function signEIP191(inputData: string, signingKey: any): Promise<string> {
-  const signingKeyBytes = ethers.utils.arrayify(signingKey);
-  const privateKey = new Uint8Array(signingKeyBytes.slice(2)); // Remove the "0x" prefix
+  const privateKey = Buffer.from(signingKey.replace("0x", ""), "hex");
   let wallet = new ethers.Wallet(privateKey);
   const hashBytes = ethers.utils.arrayify(inputData);
   const signature = await wallet.signMessage(hashBytes);
@@ -136,7 +137,7 @@ function buildOp(
   target: string,
   value: BigNumber,
   nonce: BigNumber,
-  targetData: Uint8Array,
+  targetData: string,
   suppliers: string[]
 ): UserOperation {
   let initCode: Uint8Array = new Uint8Array();
@@ -144,7 +145,7 @@ function buildOp(
     initCode = generate4337Initcode(factory, owner, salt, suppliers );
   }
   const campaignAccountInterface = new ethers.utils.Interface(campaignAccountABI);
-  const callData: string = buildCallData(campaignAccountInterface, "execute", target, targetData);
+  const callData: string = buildCallData(campaignAccountInterface, "execute", target, 0, targetData);
 
   const op: UserOperation = {
     Sender: sender,
@@ -197,9 +198,9 @@ function encodeStringArray(array: string[]): string {
 /* Contract Methods*/
 
 // This method should call our factory to get a counterfactual address
-async function getAddress(
-  factoryAddress: string,
-  owner: string,
+export async function getAddress(
+  factoryAddress: any,
+  owner: any,
   salt: bigint,
   suppliers: string[]
 ): Promise<string> {

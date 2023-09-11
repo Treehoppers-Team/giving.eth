@@ -5,6 +5,14 @@ export interface CampaignCardProps {
   goalAmount: number;
 }
 
+export async function generateStub() {
+  const campaignsInfo = await fetch("/api/campaigns")
+  console.log(campaignsInfo.body)
+  return campaignsInfo.body
+}
+
+// export const campaignsStub = generateStub();
+
 export const campaignsStub = [
   {
     charity: 'Save the Rainforest',
