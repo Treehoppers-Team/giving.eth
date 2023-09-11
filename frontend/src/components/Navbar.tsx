@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import Web3 from 'web3';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import React, { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import Web3 from "web3";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { useSession, signIn, signOut } from "next-auth/react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,18 +11,20 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 
-import { getUser } from '@/lib/api';
+import { RxAvatar } from "react-icons/rx";
 
-import LoginModalForm from './LoginModalForm';
+import { getUser } from "@/lib/api";
+
+import LoginModalForm from "./LoginModalForm";
 
 const Navbar: React.FC = () => {
   const router = useRouter();
   const { data: session } = useSession();
 
   const handleNavigateToProfile = (e: React.MouseEvent) => {
-    router.push('/profile');
+    router.push("/profile");
   };
 
   const handleLogout = (e: React.MouseEvent) => {
@@ -31,18 +33,40 @@ const Navbar: React.FC = () => {
   };
 
   const handleNavigateToCreateCampaign = () => {
-    router.push('/campaign');
+    router.push("/campaign");
+  };
+
+  const initWeb3 = async () => {
+    if (window.ethereum) {
+      try {
+        // Request access to MetaMask wallet
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+        const web3Instance = new Web3(window.ethereum);
+        setWeb3(web3Instance);
+        console.log("Web3 instance initialized.");
+
+        // Get the user's Ethereum account
+        const accounts = await web3Instance.eth.getAccounts();
+        if (accounts.length > 0) {
+          setAccount(accounts[0]);
+        }
+      } catch (error) {
+        console.error("Error connecting to MetaMask:", error);
+      }
+    } else {
+      console.error("MetaMask extension not detected.");
+    }
   };
 
   useEffect(() => {
     const fetchUser = async (email: string) => {
       const user = await getUser(email);
-      console.log('FETCHED USER!!!!!!!!!!');
+      console.log("FETCHED USER!!!!!!!!!!");
       console.log(user);
 
       if (!user.isKyc) {
         router.push({
-          pathname: 'kyc',
+          pathname: "kyc",
           query: { email },
         });
       }
@@ -57,42 +81,26 @@ const Navbar: React.FC = () => {
   const [web3, setWeb3] = useState<any>(null); // Web3 instance
   const [account, setAccount] = useState<string | null>(null); // User's Ethereum account
 
+  // Dropdown state
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   // Initialize Web3 when the component mounts
   useEffect(() => {
-    const initWeb3 = async () => {
-      if (window.ethereum) {
-        try {
-          // Request access to MetaMask wallet
-          await window.ethereum.request({ method: 'eth_requestAccounts' });
-          const web3Instance = new Web3(window.ethereum);
-          setWeb3(web3Instance);
-
-          // Get the user's Ethereum account
-          const accounts = await web3Instance.eth.getAccounts();
-          if (accounts.length > 0) {
-            setAccount(accounts[0]);
-          }
-        } catch (error) {
-          console.error('Error connecting to MetaMask:', error);
-        }
-      } else {
-        console.error('MetaMask extension not detected.');
-      }
-    };
-
     initWeb3();
   }, []);
 
   // Handle MetaMask connection
   const handleConnectMetaMask = async () => {
     if (!web3) {
-      console.error('Web3 instance not initialized.');
+      console.error("Web3 instance not initialized.");
+      initWeb3();
       return;
     }
+  
 
     try {
       // Request access to MetaMask wallet
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      await window.ethereum.request({ method: "eth_requestAccounts" });
 
       // Get the user's Ethereum account
       const accounts = await web3.eth.getAccounts();
@@ -100,8 +108,21 @@ const Navbar: React.FC = () => {
         setAccount(accounts[0]);
       }
     } catch (error) {
-      console.error('Error connecting to MetaMask:', error);
+      console.error("Error connecting to MetaMask:", error);
     }
+  };
+
+  // Toggle dropdown
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  // Handle disconnecting MetaMask
+  const handleDisconnectMetaMask = () => {
+    // Disconnect logic here (e.g., reset account and web3)
+    setAccount(null);
+    setWeb3(null);
+    setIsDropdownOpen(false);
   };
 
   return (
@@ -110,8 +131,27 @@ const Navbar: React.FC = () => {
         <Link href="/">giv.eth</Link>
       </div>
       <div className="flex space-x-2">
-        {account ? (
-          <button>Connected: {account.substring(0, 5)}</button>
+        {account && !session ? (
+          <div className="relative">
+            <Button variant="outline" onClick={toggleDropdown}>
+              Connected: {account.substring(0, 5)}
+            </Button>
+            {isDropdownOpen && (
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <div
+                    className="absolute inset-0 bg-transparent z-10"
+                    onClick={() => setIsDropdownOpen(false)}
+                  ></div>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onClick={handleDisconnectMetaMask}>
+                      Disconnect MetaMask
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenuTrigger>
+              </DropdownMenu>
+            )}
+          </div>
         ) : (
           !session && (
             <Button variant="outline" onClick={handleConnectMetaMask}>
@@ -121,22 +161,22 @@ const Navbar: React.FC = () => {
         )}
         {session ? (
           <div className="flex items-center gap-2">
+            <Button onClick={handleNavigateToCreateCampaign}>
+              Create a Campaign
+            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <Button variant="ghost">Profile</Button>
+                <Button variant="outline" size="icon">
+                  <RxAvatar className="h-6 w-6" />
+                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem onClick={handleNavigateToProfile}>
                   Campaigns
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleLogout}>
-                  Logout
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button onClick={handleNavigateToCreateCampaign}>
-              Create a Campaign
-            </Button>
           </div>
         ) : (
           <LoginModalForm />
