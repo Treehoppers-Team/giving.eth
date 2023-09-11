@@ -10,7 +10,7 @@ interface CommitmentsSectionProps {
 type Commitment = {
   supplier: string;
   percentage: string;
-  fulfilled?: string;
+  fulfilled?: boolean;
 }
 
 const CommitmentsSection: React.FC<CommitmentsSectionProps> = ({ commitment }) => {
