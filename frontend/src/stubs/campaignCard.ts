@@ -6,9 +6,11 @@ export interface CampaignCardProps {
 }
 
 export async function generateStub() {
-  const campaignsInfo = await fetch("/api/campaigns")
-  console.log(campaignsInfo.body)
-  return campaignsInfo.body
+  const response = await fetch("/api/campaigns")
+  console.log(response)
+  const campaignsData = await response.json();
+  
+  return campaignsData
 }
 
 // export const campaignsStub = generateStub();
@@ -21,7 +23,7 @@ export const campaignsStub = [
       'Support us in our endeavor to protect the rainforests and preserve biodiversity.',
     currentAmount: 150000,
     targetAmount: 500000,
-    commitment: [],
+    commitment: [{"Supplier A": "50%"}, {"Supplier B": "50%"}],
     start: '2021-09-01',
     end: '2021-12-31',
     image: '/rainforest.jpg'
