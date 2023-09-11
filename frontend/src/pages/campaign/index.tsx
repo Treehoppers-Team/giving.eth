@@ -43,8 +43,7 @@ const formSchema = z.object({
     message: "End Date is required",
   }),
   description: z.string().nonempty({ message: "Description is required" }),
-  targetAmount: z
-    .string(),
+  targetAmount: z.string(),
   commitments: z
     .array(
       z.object({
@@ -82,6 +81,10 @@ const index = () => {
     },
     mode: "all",
   });
+
+  const [supplierIsOpen, setSupplierOpen] = React.useState(
+    Array(1).fill(false) // Initialize with the first supplier
+  );
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -252,25 +255,79 @@ const index = () => {
                         control={form.control}
                         name={`commitments.${index}.supplier`}
                         render={({ field }) => (
-                          <div className="flex-grow">
+                          <FormItem className="flex flex-col">
                             <FormLabel>Supplier</FormLabel>
-                            <FormControl>
-                              <select {...field} className="select-field">
-                                <option value="" disabled>
-                                  Select Supplier
-                                </option>
-                                {suppliersStub.map((supplier) => (
-                                  <option
-                                    key={supplier.value}
-                                    value={supplier.value}
+                            <Popover
+                              open={supplierIsOpen[index]}
+                              onOpenChange={(isOpen) => {
+                                const updatedSupplierOpen = [...supplierIsOpen];
+                                updatedSupplierOpen[index] = isOpen;
+                                setSupplierOpen(updatedSupplierOpen);
+                              }}
+                            >
+                              <PopoverTrigger asChild>
+                                <FormControl>
+                                  <Button
+                                    variant="outline"
+                                    role="combobox"
+                                    className={cn(
+                                      "justify-between",
+                                      !field.value && "text-muted-foreground"
+                                    )}
                                   >
-                                    {supplier.label}
-                                  </option>
-                                ))}
-                              </select>
-                            </FormControl>
+                                    {field.value
+                                      ? suppliersStub.find(
+                                          (supplier) =>
+                                            supplier.value === field.value
+                                        )?.label
+                                      : "Select supplier"}
+                                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                  </Button>
+                                </FormControl>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-full p-0">
+                                <Command>
+                                  <CommandInput placeholder="Search suppliers..." />
+                                  <CommandEmpty>
+                                    No supplier found.
+                                  </CommandEmpty>
+                                  <CommandGroup className="max-h-60 overflow-y-auto">
+                                    {suppliersStub.map((supplier) => (
+                                      <CommandItem
+                                        value={supplier.label}
+                                        key={supplier.value}
+                                        onSelect={() => {
+                                          form.setValue(
+                                            `commitments.${index}.supplier`,
+                                            supplier.value
+                                          );
+                                          const updatedSupplierOpen = [
+                                            ...supplierIsOpen,
+                                          ];
+                                          updatedSupplierOpen[index] = false;
+                                          setSupplierOpen(updatedSupplierOpen);
+                                        }}
+                                      >
+                                        <Check
+                                          className={cn(
+                                            "mr-2 h-4 w-4",
+                                            supplier.value === field.value
+                                              ? "opacity-100"
+                                              : "opacity-0"
+                                          )}
+                                        />
+                                        {supplier.label}
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </Command>
+                              </PopoverContent>
+                            </Popover>
+                            <FormDescription>
+                              Your selected supplier
+                            </FormDescription>
                             <FormMessage />
-                          </div>
+                          </FormItem>
                         )}
                       />
 
