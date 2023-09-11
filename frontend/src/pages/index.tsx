@@ -14,7 +14,7 @@ const ExploreCampaignsSegment = () => {
       <div className="flex space-x-4">
         {campaignsStub.map(({ title, description, currentAmount, targetAmount }, index) => (
           <CharityCard
-          key={index}
+            key={index}
             title={title}
             description={description}
             currentAmount={currentAmount}
@@ -29,8 +29,16 @@ const ExploreCampaignsSegment = () => {
 export default function Home() {
   return (
     <Layout>
-      <div className="flex min-h-[80vh] items-center">
-        <ExploreCampaignsSegment />
+      <div className="relative">
+        {/* Hero Image */}
+        <div
+          className="bg-center bg-no-repeat h-[300px]"
+          style={{ backgroundImage: 'url(/flowers.png)' }}
+        ></div>
+          <div className="flex items-center">
+            <ExploreCampaignsSegment />
+          </div>
+        
       </div>
     </Layout>
   );
