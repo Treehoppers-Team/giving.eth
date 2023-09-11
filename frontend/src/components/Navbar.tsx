@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Web3 from 'web3';
+import { useRouter } from 'next/router';
+
+import Link from 'next/link';
+import LoginModalForm from './LoginModalForm';
 
 const Navbar: React.FC = () => {
+  const router = useRouter();
+  const handleLoginModalOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setIsDialogOpen(true);
+  };
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [web3, setWeb3] = useState<any>(null); // Web3 instance
   const [account, setAccount] = useState<string | null>(null); // User's Ethereum account
 
@@ -55,7 +65,9 @@ const Navbar: React.FC = () => {
 
   return (
     <div className="flex justify-between w-full">
-      <div className="font-black">give.eth</div>
+      <div className="font-black">
+        <Link href="/">give.eth</Link>
+      </div>
       <div className="flex space-x-2">
         {account ? (
           <button>Connected: {account.substring(0, 5)}</button>
@@ -64,7 +76,7 @@ const Navbar: React.FC = () => {
             Connect MetaMask
           </Button>
         )}
-        <Button>Charity Login</Button>
+        <LoginModalForm />
       </div>
     </div>
   );

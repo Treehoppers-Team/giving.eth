@@ -11,7 +11,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className={`flex p-24 flex-col ${inter.className}`}>
+    <div className={`flex px-24 py-12 flex-col ${inter.className}`}>
       <Navbar />
       <div className="flex">{children}</div>
     </div>
