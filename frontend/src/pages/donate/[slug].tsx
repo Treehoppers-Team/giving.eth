@@ -6,7 +6,20 @@ import Layout from "@/components/Layout";
 import RecentDonationsSection from "@/components/RecentDonationsSection";
 import CommitmentsSection from "@/components/CommitmentsSection";
 import CharityProgressSection from "@/components/CharityProgressSection";
+import { DocumentReference, Timestamp } from "@firebase/firestore-types";
 
+type Campaign = {
+  id: string; // document ID
+  title: string;
+  description: string;
+  category: string;
+  start: Timestamp;
+  end: Timestamp;
+  targetAmount: number;
+  currentAmount: number;
+  commitment: Object[];
+  charity: DocumentReference;
+};
 interface CampaignProps {
   campaign: {
     title: string;
@@ -69,7 +82,17 @@ const CampaignPage: React.FC<CampaignProps> = ({ campaign }) => {
 };
 
 export async function getStaticPaths() {
-  const paths = campaignsStub.map((campaign) => ({
+  let campaigns;
+
+  const response = await fetch('http://localhost:3000/api/campaigns', {
+    method: 'GET'
+  });
+
+  campaigns = await response.json();
+  console.log("campaigns",campaigns)
+
+
+  const paths = campaigns.map((campaign: Campaign) => ({
     params: { slug: campaign.title.replace(/\s+/g, "-").toLowerCase() },
   }));
 
@@ -77,9 +100,19 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
+
+  let campaigns;
+
+  const response = await fetch('http://localhost:3000/api/campaigns', {
+    method: 'GET'
+  });
+
+  campaigns = await response.json();
+  console.log("campaigns",campaigns)
+  
   const slug = params.slug;
-  const campaign = campaignsStub.find(
-    (campaign) =>
+  const campaign = campaigns.find(
+    (campaign: Campaign) =>
       campaign.title.replace(/\s+/g, "-").toLowerCase() === slug
   );
 

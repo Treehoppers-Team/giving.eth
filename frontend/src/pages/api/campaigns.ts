@@ -68,6 +68,8 @@ async function getCampaigns() {
     } as Campaign);
   });
 
+  // console.log(campaigns)
+
   return campaigns;
 }
 

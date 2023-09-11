@@ -47,15 +47,15 @@ type Campaign = {
   category: string;
   start: Timestamp;
   end: Timestamp;
-  targetAmount: Number;
-  currentAmount: Number;
-  commitments: Commitment[];
+  targetAmount: number;
+  currentAmount: number;
+  commitment: Commitment[];
   charity: DocumentReference;
 };
 
 type Commitment = {
   supplier: string;
-  percentage: Number;
+  percentage: number;
 }
 
 export async function calculateCampaignAddress(id: any) {
@@ -79,7 +79,7 @@ export async function calculateCampaignAddress(id: any) {
     // console.log("Document data:", campaignDoc.data())
     const campaignData = campaignDoc.data() as Campaign;
     console.log(campaignData);
-    const commitmentArray = campaignData.commitments;
+    const commitmentArray = campaignData.commitment;
 
     const supplierDetails = [];
 
