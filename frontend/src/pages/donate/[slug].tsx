@@ -17,7 +17,7 @@ type Campaign = {
   end: Timestamp;
   targetAmount: number;
   currentAmount: number;
-  commitment: Object[];
+  commitment: Commitment[];
   charity: DocumentReference;
 };
 interface CampaignProps {
@@ -26,12 +26,18 @@ interface CampaignProps {
     description: string;
     currentAmount: number;
     targetAmount: number;
-    commitment: string[];
+    commitment: Commitment[];
     charity: string;
     start: string;
     end: string;
     image: string;
   };
+}
+
+type Commitment = {
+  supplier: string;
+  percentage: string;
+  fulfilled?: string;
 }
 
 const CampaignPage: React.FC<CampaignProps> = ({ campaign }) => {
@@ -90,6 +96,12 @@ export async function getStaticPaths() {
 
   campaigns = await response.json();
   console.log("campaigns",campaigns)
+
+  for (let i = 0; i < campaigns.length; i++) {
+    const campaign = campaigns[i];
+    console.log(campaign.commitment)
+  }
+
 
 
   const paths = campaigns.map((campaign: Campaign) => ({

@@ -94,6 +94,14 @@ const index = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // console.log(values);
 
+    let inputCommitments = values.commitments.map((commitment) => {
+      return {
+        supplier: commitment.supplier,
+        percentage: commitment.percentage,
+        fulfilled: false,
+      };
+    })
+
     let input = {
       title: values.name,
       category: values.category,
@@ -102,8 +110,9 @@ const index = () => {
       description: values.description,
       targetAmount: values.targetAmount,
       currentAmount: 0,
-      commitment: values.commitments,
+      commitment: inputCommitments,
       charity: "charity",
+      image: "/donate.jpg",
     }
     
     try {
