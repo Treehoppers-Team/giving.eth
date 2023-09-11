@@ -4,21 +4,9 @@ import Layout from '@/components/Layout';
 import Navbar from '@/components/Navbar';
 import CharityCard from '@/components/CharityCard';
 import { Timestamp, DocumentReference } from '@firebase/firestore-types';
-
+import { Campaign, Commitment } from "@/types/charities";
 const inter = Inter({ subsets: ['latin'] });
 
-type Campaign = {
-  id: string; // document ID
-  title: string;
-  description: string;
-  category: string;
-  start: Timestamp;
-  end: Timestamp;
-  targetAmount: number;
-  currentAmount: number;
-  commitment: Object[];
-  charity: DocumentReference;
-};
 
 interface ExploreCampaignsSegmentProps {
   campaigns: Campaign[];

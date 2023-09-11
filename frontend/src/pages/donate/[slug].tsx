@@ -7,19 +7,8 @@ import RecentDonationsSection from "@/components/RecentDonationsSection";
 import CommitmentsSection from "@/components/CommitmentsSection";
 import CharityProgressSection from "@/components/CharityProgressSection";
 import { DocumentReference, Timestamp } from "@firebase/firestore-types";
+import { Campaign, Commitment } from "@/types/charities";
 
-type Campaign = {
-  id: string; // document ID
-  title: string;
-  description: string;
-  category: string;
-  start: Timestamp;
-  end: Timestamp;
-  targetAmount: number;
-  currentAmount: number;
-  commitment: Commitment[];
-  charity: DocumentReference;
-};
 interface CampaignProps {
   campaign: {
     title: string;
@@ -34,11 +23,6 @@ interface CampaignProps {
   };
 }
 
-type Commitment = {
-  supplier: string;
-  percentage: string;
-  fulfilled?: string;
-}
 
 const CampaignPage: React.FC<CampaignProps> = ({ campaign }) => {
   const router = useRouter();
