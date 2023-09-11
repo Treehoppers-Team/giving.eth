@@ -32,12 +32,22 @@ const submitTransaction = async () => {
       // Amount to transfer (0.000001 MATIC in Wei)
       const amountInWei = web3.utils.toWei("0.000000000000000001", "ether");
 
+      const senderBalance = await web3.eth.getBalance(senderAddress);
+      const balanceInWei = web3.utils.fromWei(senderBalance, 'ether')
+      console.log("Sender's Balance: ", balanceInWei)
+
+      const networkId = await web3.eth.getChainId();
+      console.log("Chain ID: ", networkId)
+
+      const gasLimit = 100000;
+
       // Create a transaction object
       const transactionObject = {
         from: senderAddress,
         to: recipientAddress,
         value: amountInWei,
         chainId: 80001,
+        gas: gasLimit
       };
 
       console.log("Transaction Object:", transactionObject);
