@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
   };
 
   const handleNavigateToCreateCampaign = () => {
-    router.push('/create');
+    router.push('/campaign');
   };
 
   useEffect(() => {
@@ -107,7 +107,7 @@ const Navbar: React.FC = () => {
   return (
     <div className="flex justify-between w-full">
       <div className="font-black">
-        <Link href="/">give.eth</Link>
+        <Link href="/">giv.eth</Link>
       </div>
       <div className="flex space-x-2">
         {account ? (
