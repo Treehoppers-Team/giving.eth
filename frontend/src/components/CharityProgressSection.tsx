@@ -12,7 +12,7 @@ interface CharityProgressSectionProps {
   charity: string;
 }
 
-const submitTransaction = async () => {
+const submitDefaultTransaction = async () => {
   try {
 
     const web3 = new Web3(window.ethereum);
@@ -64,6 +64,10 @@ const submitTransaction = async () => {
   }
 };
 
+const submitTransferTransaction = async () => {
+  
+}
+
 const CharityProgressSection: React.FC<CharityProgressSectionProps> = ({
   progressValue,
   currentAmount,
@@ -88,7 +92,7 @@ const CharityProgressSection: React.FC<CharityProgressSectionProps> = ({
         <p className="text-gray-600">{charity}</p>
       </section>
       <section className="mb-4">
-        <Button onClick={submitTransaction}>Donate Now!</Button>
+        <Button onClick={submitDefaultTransaction}>Donate Now!</Button>
       </section>
     </section>
   );
