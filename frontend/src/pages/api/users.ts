@@ -33,8 +33,13 @@ export default async function handler(
       const newUser = await createUser(newUserData);
       res.status(201).json(newUser);
     } else if (req.method === 'PUT') {
-      const { email } = req.query;
-      await updateUserKycStatus(email as string);
+      const { email, uen, name, category } = req.body;
+      await updateUserKycStatus(
+        email as string,
+        name as string,
+        uen as string,
+        category as string
+      );
       res.status(200).json({ message: 'User KYC status updated successfully' });
     } else {
       res.status(405).json({ message: 'Method not allowed' });
@@ -77,7 +82,13 @@ async function createUser(newUserData: User) {
   return newUserData;
 }
 
-async function updateUserKycStatus(email: string) {
+async function updateUserKycStatus(
+  email: string,
+  uen: string,
+  name: string,
+  category: string
+) {
+  console.log('from backend', email, uen, name, category);
   const userRef = doc(db, 'users', email);
-  await updateDoc(userRef, { isKyc: true });
+  await updateDoc(userRef, { isKyc: true, uen, name, category });
 }

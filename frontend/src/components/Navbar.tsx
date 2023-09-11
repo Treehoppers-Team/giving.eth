@@ -39,6 +39,13 @@ const Navbar: React.FC = () => {
       const user = await getUser(email);
       console.log('FETCHED USER!!!!!!!!!!');
       console.log(user);
+
+      if (!user.isKyc) {
+        router.push({
+          pathname: 'kyc',
+          query: { email },
+        });
+      }
     };
 
     if (session && session.user && session.user.email) {

@@ -57,3 +57,37 @@ export async function getUser(email: string) {
     console.error('Error fetching user:', error);
   }
 }
+
+export async function kycUser(
+  email: string,
+  uen: string,
+  name: string,
+  category: string
+) {
+  const headers = { 'Content-Type': 'application/json' };
+
+  try {
+    const res = await fetch(`/api/users?email=${encodeURIComponent(email)}`, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({
+        email,
+        isKyc: true,
+        uen,
+        name,
+        category,
+      }),
+    });
+    console.log('Response from backend', res);
+
+    if (!res.ok) {
+      throw new Error('Network response was not ok: ' + res.statusText);
+    }
+
+    const responseData = await res.json();
+    console.log('User KYC updated:', responseData);
+    return responseData;
+  } catch (error) {
+    console.error('Error updating user KYC:', error);
+  }
+}
