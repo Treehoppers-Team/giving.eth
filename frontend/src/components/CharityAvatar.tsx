@@ -8,27 +8,6 @@ interface CharityProfileProps {
 }
 
 function CharityAvatar({ name, imageUrl }: CharityProfileProps) {
-  const containerStyle = {
-    display: "flex",
-    flexDirection: "column", // Arrange items vertically
-    alignItems: "flex-start", // Align items to the left
-  };
-
-  const charityNameStyle = {
-    marginTop: "10px",
-    fontSize: "18px",
-    fontWeight: "bold",
-    color: "#333",
-    textAlign: "center", // Center the text horizontally
-  };
-
-  const imageStyle = {
-    width: "150px",
-    height: "150px",
-    borderRadius: "50%",
-    objectFit: "cover",
-    border: "2px solid #007BFF",
-  };
 
   return (
     <div
@@ -36,6 +15,7 @@ function CharityAvatar({ name, imageUrl }: CharityProfileProps) {
         display: "flex",
         flexDirection: "column", // Arrange items vertically
         alignItems: "flex-start", // Align items to the left
+        marginTop: "10px",
       }}
     >
       <div

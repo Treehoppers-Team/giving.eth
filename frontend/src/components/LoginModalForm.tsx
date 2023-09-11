@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
+import Link from 'next/link';
 
 import {
   Form,
@@ -23,7 +24,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import Link from 'next/link';
 
 const formSchema = z.object({
   email: z.string().nonempty({ message: 'Email is required' }),
@@ -53,7 +53,7 @@ const LoginModalForm = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader className="space-y-4">
-          <DialogTitle>Login</DialogTitle>
+          <DialogTitle className="text-2xl font-bold">Login</DialogTitle>
           <DialogDescription>
             <Form {...form}>
               <form
@@ -99,7 +99,7 @@ const LoginModalForm = () => {
                 </Button>
                 <div>
                   Don't have an account yet?{' '}
-                  <Link href="/sign-up">
+                  <Link href="/register">
                     <Button variant="link">Sign Up</Button>
                   </Link>
                 </div>
