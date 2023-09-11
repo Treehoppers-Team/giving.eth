@@ -19,8 +19,9 @@ interface RecentDonationsCardProps {
     return (
       // Add an onClick event to the Card div to handle the click event
       <div style={{ cursor: 'pointer' }}>
-        <Card>
-          <CardContent>
+        <Card className='p-4 m-1'>
+
+            <div className='flex flex-col'>
             <p className="text-black-400 font-semibold text-xs">
                 Donor: {donor}
             </p>
@@ -30,7 +31,8 @@ interface RecentDonationsCardProps {
             <p className="text-gray-400 font-semibold text-xs">
                 Amount: {amount}
             </p>
-          </CardContent>
+            </div>
+
         </Card>
       </div>
     );

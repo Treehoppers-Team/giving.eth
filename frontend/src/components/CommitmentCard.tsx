@@ -19,7 +19,7 @@ const CommitmentCard: React.FC<CommitmentCardProps> = ({
 
   return (
     <Card
-      className={`m-1 w-1/2 ${bgColor} ${borderStyle} ${opacity} hover:scale-105 transform transition-transform duration-200 ease-in-out`}
+      className={`m-1 w-1/2 ${bgColor} ${borderStyle} ${opacity} hover:scale-105 transform transition-transform duration-300 ease-in-out`}
     >
       <div className="flex p-4 items-center justify-between">
         <div className="text-lg font-semibold">
