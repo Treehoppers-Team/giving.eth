@@ -23,6 +23,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 
 import { campaignCategoriesStub } from "@/stubs/campaignCategories";
 import { suppliersStub } from "@/stubs/suppliers";
+import Link from "next/link";
 
 import {
   Form,
@@ -38,14 +39,12 @@ import { Input } from "@/components/ui/input";
 const formSchema = z.object({
   name: z.string().nonempty({ message: "Campaign name is required" }),
   category: z.string().nonempty({ message: "Category is required" }),
-  endDate: z.date().refine((value) => !isNaN(value.getTime()), {
+  endDate: z.string().refine((value) => !isNaN(parseInt(value)), {
     message: "End Date is required",
   }),
   description: z.string().nonempty({ message: "Description is required" }),
   targetAmount: z
-    .number()
-    .int()
-    .min(0, { message: "Target Amount must be a positive integer" }),
+    .string(),
   commitments: z
     .array(
       z.object({
@@ -76,9 +75,9 @@ const index = () => {
     defaultValues: {
       name: "",
       category: "",
-      endDate: undefined, // Initialize with null value for date fields
+      endDate: "1", // Initialize with null value for date fields
       description: "",
-      targetAmount: 0,
+      targetAmount: "0",
       commitments: [{ supplier: "", percentage: 0 }], // Initialize with the first supplier
     },
     mode: "all",
@@ -308,21 +307,23 @@ const index = () => {
                   Add Commitment
                 </Button>
               </div>
-              <Button
-                type="submit"
-                disabled={
-                  !form.formState.isValid || form.formState.isSubmitting
-                }
-              >
-                {form.formState.isSubmitting ? (
-                  <>
-                    <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                    <p>Please wait</p>
-                  </>
-                ) : (
-                  <p>Submit</p>
-                )}
-              </Button>
+                <Button
+                  type="submit"
+                  disabled={
+                    form.formState.isSubmitting
+                  }
+                >
+                  <Link href="/">
+                  {form.formState.isSubmitting ? (
+                    <>
+                      <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                      <p>Please wait</p>
+                    </>
+                  ) : (
+                    <p>Submit</p>
+                  )}
+                  </Link>
+                </Button>
             </form>
           </Form>
         </div>
