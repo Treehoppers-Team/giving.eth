@@ -198,9 +198,9 @@ function encodeStringArray(array: string[]): string {
 /* Contract Methods*/
 
 // This method should call our factory to get a counterfactual address
-async function getAddress(
-  factoryAddress: string,
-  owner: string,
+export async function getAddress(
+  factoryAddress: any,
+  owner: any,
   salt: bigint,
   suppliers: string[]
 ): Promise<string> {
