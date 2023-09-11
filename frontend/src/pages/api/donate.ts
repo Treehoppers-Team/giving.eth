@@ -11,6 +11,10 @@ import {
   doc,
   getDoc,
   getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
 } from "firebase/firestore";
 import firebaseApp from "../../../firebaseConfig";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -45,9 +49,14 @@ type Campaign = {
   end: Timestamp;
   targetAmount: Number;
   currentAmount: Number;
-  commitment: Object[];
+  commitments: Commitment[];
   charity: DocumentReference;
 };
+
+type Commitment = {
+  supplier: string;
+  percentage: Number;
+}
 
 export async function calculateCampaignAddress(id: any) {
   // convert string to bigInt
@@ -67,31 +76,29 @@ export async function calculateCampaignAddress(id: any) {
   const campaignDoc = await getDoc(campaignRef);
 
   if (campaignDoc.exists()) {
+    // console.log("Document data:", campaignDoc.data())
     const campaignData = campaignDoc.data() as Campaign;
     console.log(campaignData);
-    const commitmentArray = campaignData.commitment;
+    const commitmentArray = campaignData.commitments;
 
     const supplierDetails = [];
 
-    console.log(commitmentArray[0]);
-    console.log(typeof commitmentArray);
+    for (const commitment of commitmentArray) {
+      const supplierName = commitment.supplier;
 
-    for (const commitmentKey in commitmentArray) {
-      if (commitmentArray.hasOwnProperty(commitmentKey)) {
-        const commitment = commitmentArray[commitmentKey];
+      // Create a reference to the "suppliers" collection and query by "name"
+      const suppliersCollectionRef = collection(db, "suppliers");
+      const q = query(suppliersCollectionRef, where("name", "==", supplierName));
 
-        const supplierRef = commitment.supplier;
+      // Execute the query to get the matching documents
+      const querySnapshot = await getDocs(q);
 
-        console.log("Supplier: " + supplierRef);
-        console.log(typeof supplierRef);
-
-        const supplierDoc = await getDoc(supplierRef);
-
-        if (supplierDoc.exists()) {
-          // Access supplier fields and add them to the supplierDetails array
-          const supplierData = supplierDoc.data();
-          supplierDetails.push(supplierData.wid);
-        }
+      if (!querySnapshot.empty) {
+        // Get the first matching document (assuming there's only one)
+        console.log(querySnapshot.docs[0].data());
+        const supplierDoc = querySnapshot.docs[0];
+        const supplierData = supplierDoc.data();
+        supplierDetails.push(supplierData.wid);
       }
       // return supplierDetails;
     }

@@ -21,7 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm, useFieldArray } from "react-hook-form";
 
-import { campaignCategoriesStub } from "@/stubs/campaignCategories";
+import { campaignCategoriesStub } from "@/stubs/campaignCategories";``
 import { suppliersStub } from "@/stubs/suppliers";
 import Link from "next/link";
 
@@ -88,11 +88,37 @@ const index = () => {
     name: "commitments",
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    // console.log(values);
+    try {
+      const response = await fetch('/api/campaigns', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+  
+      if (response.ok) {
+        const newCampaign = await response.json();
+        console.log('Campaign created successfully:', newCampaign);
+        // You can redirect the user or perform any other actions here
+      } else {
+        const errorData = await response.json();
+        console.error('Error creating campaign:', errorData);
+        // Handle the error, display a message to the user, etc.
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+      // Handle network errors or other exceptions here
+    }
   }
+  
+  // function onSubmit(values: z.infer<typeof formSchema>) {
+
+  //   // submit to nextjs api route
+    
+  // }
 
   return (
     <Layout>
@@ -312,8 +338,12 @@ const index = () => {
                   disabled={
                     form.formState.isSubmitting
                   }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onSubmit(form.getValues());
+                  }}
                 >
-                  <Link href="/">
+                  
                   {form.formState.isSubmitting ? (
                     <>
                       <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
@@ -322,7 +352,7 @@ const index = () => {
                   ) : (
                     <p>Submit</p>
                   )}
-                  </Link>
+                  
                 </Button>
             </form>
           </Form>

@@ -74,7 +74,9 @@ async function getCampaigns() {
 async function createCampaign(newCampaignData: Campaign) {
   const campaignsCollection = collection(db, "campaigns");
   const newCampaignRef = await addDoc(campaignsCollection, newCampaignData);
+
   newCampaignData.id = newCampaignRef.id;
+  // console.log(newCampaignData.id);
 
   await insertCampaignAddressIntoFirebase(newCampaignData.id);
   return newCampaignData;
