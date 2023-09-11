@@ -23,7 +23,7 @@ export const campaignsStub = [
       'Support us in our endeavor to protect the rainforests and preserve biodiversity.',
     currentAmount: 150000,
     targetAmount: 500000,
-    commitment: [{"supplier": "Logistics", "percentage": "50%", "fulfilled":"true"}, {"supplier": "Manpower", "percentage": "50%", "fulfilled":"false"}],
+    commitment: [{"supplier": "Logistics", "percentage": "50%", "fulfilled":"false"}, {"supplier": "Manpower", "percentage": "50%", "fulfilled":"false"}],
     start: '2021-09-01',
     end: '2021-12-31',
     image: '/rainforest.jpg'
