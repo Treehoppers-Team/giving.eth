@@ -75,6 +75,9 @@
   }
 }
 
+
+/* CSS for Rainbow Gradient Background */
+
 body {
   background: linear-gradient(45deg, #f2a4a4, #f4c2c2, #fce6b5, #f5f3b4, #bdf1c3, #aad9e1, #d2b7f5);
   background-size: 400% 400%;
