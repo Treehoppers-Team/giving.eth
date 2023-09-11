@@ -25,7 +25,7 @@ const submitDefaultTransaction = async () => {
       console.log("Sender Address:", senderAddress);
 
       // Recipient's address (null address)
-      const response = await fetch('/api/blockchain')
+      const response = await fetch('/api/donate?id=5XUCEe0GNc1rxTNAtNCP')
       const recipientAddress = await response.json()
       console.log("Recipient Address:", recipientAddress);
 

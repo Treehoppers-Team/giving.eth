@@ -12,6 +12,7 @@ import {
   deleteDoc,
   getFirestore,
 } from "firebase/firestore";
+import { calculateCampaignAddress } from "./donate"
 
 const db = getFirestore(firebaseApp)
 
@@ -73,10 +74,19 @@ async function getCampaigns() {
 async function createCampaign(newCampaignData: Campaign) {
   const campaignsCollection = collection(db, "campaigns");
   const newCampaignRef = await addDoc(campaignsCollection, newCampaignData);
-
   newCampaignData.id = newCampaignRef.id;
 
+  await insertCampaignAddressIntoFirebase(newCampaignData.id);
   return newCampaignData;
+}
+
+async function insertCampaignAddressIntoFirebase(id: string) {
+  const campaignAddress = await calculateCampaignAddress(id);
+
+  const campaignRef = doc(db, "campaigns", id);
+  const updatedField = { "campaignAddress": campaignAddress };
+
+  await updateDoc(campaignRef, updatedField);
 }
 
 async function updateCampaign(id: string, updatedCampaignData: Campaign) {

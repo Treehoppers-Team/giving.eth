@@ -27,7 +27,7 @@ export default async function handler(
   try {
     if (req.method === "GET") {
       const { id } = req.query;
-      const response = await getCampaignAddress(id);
+      const response = await getCampaignInfo(id);
       res.status(200).json(response);
     }
   } catch (error) {
@@ -49,7 +49,7 @@ type Campaign = {
   charity: DocumentReference;
 };
 
-async function getCampaignAddress(id: any) {
+export async function calculateCampaignAddress(id: any) {
   // convert string to bigInt
   const hash = createHash("sha256").update(id).digest("hex");
 
@@ -104,5 +104,14 @@ async function getCampaignAddress(id: any) {
       supplierDetails
     );
     return campaignAddress;
+  }
+}
+
+async function getCampaignInfo(id: string) {
+  const campaignRef = doc(db, "campaigns", id);
+  const campaignDoc = await getDoc(campaignRef);
+  console.log(campaignDoc)
+  if (campaignDoc.exists()) {
+    return campaignDoc.data().campaignAddress;
   }
 }
