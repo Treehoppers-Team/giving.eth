@@ -2,17 +2,51 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Web3 from 'web3';
 import { useRouter } from 'next/router';
-
 import Link from 'next/link';
+import { useSession, signIn, signOut } from 'next-auth/react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+import { getUser } from '@/lib/api';
+
 import LoginModalForm from './LoginModalForm';
 
 const Navbar: React.FC = () => {
   const router = useRouter();
-  const handleLoginModalOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setIsDialogOpen(true);
+  const { data: session } = useSession();
+
+  const handleNavigateToProfile = (e: React.MouseEvent) => {
+    router.push('/profile');
   };
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleLogout = (e: React.MouseEvent) => {
+    e.preventDefault();
+    signOut();
+  };
+
+  const handleNavigateToCreateCampaign = () => {
+    router.push('/create');
+  };
+
+  useEffect(() => {
+    const fetchUser = async (email: string) => {
+      const user = await getUser(email);
+      console.log('FETCHED USER!!!!!!!!!!');
+      console.log(user);
+    };
+
+    if (session && session.user && session.user.email) {
+      fetchUser(session.user.email);
+    }
+  }, [session]);
+
+  // web3
   const [web3, setWeb3] = useState<any>(null); // Web3 instance
   const [account, setAccount] = useState<string | null>(null); // User's Ethereum account
 
@@ -72,11 +106,34 @@ const Navbar: React.FC = () => {
         {account ? (
           <button>Connected: {account.substring(0, 5)}</button>
         ) : (
-          <Button variant="outline" onClick={handleConnectMetaMask}>
-            Connect MetaMask
-          </Button>
+          !session && (
+            <Button variant="outline" onClick={handleConnectMetaMask}>
+              Connect MetaMask
+            </Button>
+          )
         )}
-        <LoginModalForm />
+        {session ? (
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Button variant="ghost">Profile</Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={handleNavigateToProfile}>
+                  Campaigns
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Button onClick={handleNavigateToCreateCampaign}>
+              Create a Campaign
+            </Button>
+          </div>
+        ) : (
+          <LoginModalForm />
+        )}
       </div>
     </div>
   );
