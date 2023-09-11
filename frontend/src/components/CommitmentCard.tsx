@@ -8,11 +8,13 @@ import { Button } from "./ui/button";
 interface CommitmentCardProps {
     supplier: string;
     percentage: string;
+    fulfilled: string;
   }
   
   const CommitmentCard: React.FC<CommitmentCardProps> = ({
     supplier,
     percentage,
+    fulfilled,
   }) => {
     return (
       // Add an onClick event to the Card div to handle the click event
@@ -20,8 +22,11 @@ interface CommitmentCardProps {
         <Card>
           <CardContent>
             {supplier}: {percentage}
+            Fulfilled: {fulfilled}
           </CardContent>
-          <Button>Fulfill</Button>
+          <Button>
+            {fulfilled === 'true' ? 'Fulfilled!' : 'Fulfill Now'}
+            </Button>
         </Card>
       </div>
     );
