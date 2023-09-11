@@ -3,6 +3,7 @@ import { campaignAccountFactoryABI } from "../../abis/abi"
 import { getFirestore } from "firebase/firestore";
 import firebaseApp from "../../../firebaseConfig"
 import { NextApiRequest, NextApiResponse } from "next";
+require('dotenv').config();
 
 const db = getFirestore(firebaseApp)
 
@@ -43,6 +44,7 @@ function generate4337Initcode(factoryAddress: string, owner: string, salt: bigin
     console.log("InitCode:", ethers.utils.hexlify(concatBytes));
     return concatBytes;
 }
+
 function encodeStringArray(array: string[]): string {
     return array.join(";");
 }
@@ -57,7 +59,7 @@ async function getAddress(
   suppliers: string[]
 ): Promise<string> {
   // Connect to an Ethereum provider
-  const provider = new ethers.providers.JsonRpcProvider(providerUrl);
+  const provider = new ethers.providers.JsonRpcProvider(process.env.PROVIDERURL);
 
   // Create an instance of your smart contract
   const factoryContract = new ethers.Contract(factoryAddress, campaignAccountFactoryABI, provider);
