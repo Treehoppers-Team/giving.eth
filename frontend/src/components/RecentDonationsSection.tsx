@@ -1,8 +1,9 @@
 // RecentDonationsSection.tsx
 import React from "react";
+import RecentDonationsCard from '@/components/RecentDonationsCard';
 
 interface RecentDonationsSectionProps {
-  donations: string[];
+  donations: any[];
 }
 
 const RecentDonationsSection: React.FC<RecentDonationsSectionProps> = ({
@@ -12,8 +13,13 @@ const RecentDonationsSection: React.FC<RecentDonationsSectionProps> = ({
     <section>
       <h2 className="text-3xl font-semibold mb-2">Recent Donations</h2>
       <ul className="list-disc list-inside">
-        {donations.map((donor, index) => (
-          <li key={index}>{donor}</li>
+        {donations.map((donation, index) => (
+          <RecentDonationsCard
+            key={index}
+            donor={donation.donor}
+            time={donation.time}
+            amount={donation.amount}
+          />
         ))}
       </ul>
     </section>

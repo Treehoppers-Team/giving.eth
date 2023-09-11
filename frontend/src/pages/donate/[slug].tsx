@@ -62,7 +62,7 @@ const CampaignPage: React.FC<CampaignProps> = ({ campaign }) => {
           daysRemaining={daysRemaining}
           charity={campaign.charity}
         />
-        <RecentDonationsSection donations={["Donor 1", "Donor 2", "Donor 3"]} />
+        <RecentDonationsSection donations={[{"donor":"0x..111", "time":"5 Hours Ago", "amount":"1 MATIC"}, {"donor":"0x..354", "time":"1 Day Ago", "amount":"58.2 MATIC"}, {"donor":"0x..259", "time":"5 Days Ago", "amount":"0.001 MATIC"}]} />
       </div>
     </Layout>
   );
