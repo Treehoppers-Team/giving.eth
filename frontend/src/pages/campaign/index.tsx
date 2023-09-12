@@ -1,30 +1,31 @@
-import React from "react";
+import React from 'react';
 import { useRouter } from 'next/router'; // Import useRouter from Next.js
-import { cn } from "@/lib/utils";
-import { ReloadIcon } from "@radix-ui/react-icons";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from '@/lib/utils';
+import { ReloadIcon } from '@radix-ui/react-icons';
+import { Check, ChevronsUpDown } from 'lucide-react';
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command";
+} from '@/components/ui/command';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import Layout from "@/components/Layout";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/popover';
+import Layout from '@/components/Layout';
+import { Button } from '@/components/ui/button';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { useForm, useFieldArray } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useForm, useFieldArray } from 'react-hook-form';
 
-import { campaignCategoriesStub } from "@/stubs/campaignCategories";``
-import { suppliersStub } from "@/stubs/suppliers";
-import Link from "next/link";
+import { campaignCategoriesStub } from '@/stubs/campaignCategories';
+``;
+import { suppliersStub } from '@/stubs/suppliers';
+import Link from 'next/link';
 
 import {
   Form,
@@ -34,17 +35,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { useState } from 'react';
 
 const formSchema = z.object({
-  name: z.string().nonempty({ message: "Campaign name is required" }),
-  category: z.string().nonempty({ message: "Category is required" }),
+  name: z.string().nonempty({ message: 'Campaign name is required' }),
+  category: z.string().nonempty({ message: 'Category is required' }),
   endDate: z.string().refine((value) => !isNaN(parseInt(value)), {
-    message: "End Date is required",
+    message: 'End Date is required',
   }),
-  description: z.string().nonempty({ message: "Description is required" }),
+  description: z.string().nonempty({ message: 'Description is required' }),
   targetAmount: z.string(),
   commitments: z
     .array(
@@ -55,8 +56,8 @@ const formSchema = z.object({
         percentage: z
           .number()
           .int()
-          .min(0, { message: "Percentage must be a positive integer" })
-          .max(100, { message: "Percentage cannot exceed 100%" }),
+          .min(0, { message: 'Percentage must be a positive integer' })
+          .max(100, { message: 'Percentage cannot exceed 100%' }),
       })
     )
     .refine(
@@ -74,14 +75,14 @@ const Index = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      category: "",
-      endDate: "1", // Initialize with null value for date fields
-      description: "",
-      targetAmount: "0",
-      commitments: [{ supplier: "", percentage: 0 }], // Initialize with the first supplier
+      name: '',
+      category: '',
+      endDate: '1', // Initialize with null value for date fields
+      description: '',
+      targetAmount: '0',
+      commitments: [{ supplier: '', percentage: 0 }], // Initialize with the first supplier
     },
-    mode: "all",
+    mode: 'all',
   });
 
   const [supplierIsOpen, setSupplierOpen] = useState(
@@ -90,7 +91,7 @@ const Index = () => {
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: "commitments",
+    name: 'commitments',
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -113,30 +114,33 @@ const Index = () => {
       targetAmount: values.targetAmount,
       currentAmount: 0,
       commitment: inputCommitments,
-      charity: "charity",
-      image: "/donate.jpg",
+      charity: 'charity',
+      image: '/donate.jpg',
     };
 
     try {
-      const response = await fetch("/api/campaigns", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(input),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/campaigns`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(input),
+        }
+      );
 
       if (response.ok) {
         const newCampaign = await response.json();
-        console.log("Campaign created successfully:", newCampaign);
+        console.log('Campaign created successfully:', newCampaign);
         // You can redirect the user or perform any other actions here
       } else {
         const errorData = await response.json();
-        console.error("Error creating campaign:", errorData);
+        console.error('Error creating campaign:', errorData);
         // Handle the error, display a message to the user, etc.
       }
     } catch (error) {
-      console.error("An error occurred:", error);
+      console.error('An error occurred:', error);
       // Handle network errors or other exceptions here
     }
   }
@@ -191,15 +195,15 @@ const Index = () => {
                               variant="outline"
                               role="combobox"
                               className={cn(
-                                "justify-between",
-                                !field.value && "text-muted-foreground"
+                                'justify-between',
+                                !field.value && 'text-muted-foreground'
                               )}
                             >
                               {field.value
                                 ? campaignCategoriesStub.find(
                                     (category) => category.value === field.value
                                   )?.label
-                                : "Select category"}
+                                : 'Select category'}
                               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>
@@ -214,16 +218,16 @@ const Index = () => {
                                   value={category.label}
                                   key={category.value}
                                   onSelect={() => {
-                                    form.setValue("category", category.value);
+                                    form.setValue('category', category.value);
                                     setCategoryOpen(false);
                                   }}
                                 >
                                   <Check
                                     className={cn(
-                                      "mr-2 h-4 w-4",
+                                      'mr-2 h-4 w-4',
                                       category.value === field.value
-                                        ? "opacity-100"
-                                        : "opacity-0"
+                                        ? 'opacity-100'
+                                        : 'opacity-0'
                                     )}
                                   />
                                   {category.label}
@@ -311,8 +315,8 @@ const Index = () => {
                                     variant="outline"
                                     role="combobox"
                                     className={cn(
-                                      "justify-between",
-                                      !field.value && "text-muted-foreground"
+                                      'justify-between',
+                                      !field.value && 'text-muted-foreground'
                                     )}
                                   >
                                     {field.value
@@ -320,7 +324,7 @@ const Index = () => {
                                           (supplier) =>
                                             supplier.value === field.value
                                         )?.label
-                                      : "Select supplier"}
+                                      : 'Select supplier'}
                                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                   </Button>
                                 </FormControl>
@@ -350,10 +354,10 @@ const Index = () => {
                                       >
                                         <Check
                                           className={cn(
-                                            "mr-2 h-4 w-4",
+                                            'mr-2 h-4 w-4',
                                             supplier.value === field.value
-                                              ? "opacity-100"
-                                              : "opacity-0"
+                                              ? 'opacity-100'
+                                              : 'opacity-0'
                                           )}
                                         />
                                         {supplier.label}
@@ -422,7 +426,7 @@ const Index = () => {
                   type="button"
                   onClick={() =>
                     append(
-                      { supplier: "", percentage: 0 },
+                      { supplier: '', percentage: 0 },
                       { shouldFocus: true }
                     )
                   }

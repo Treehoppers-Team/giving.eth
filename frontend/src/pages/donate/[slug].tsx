@@ -1,13 +1,13 @@
 // pages/donate/[slug].tsx
-import React from "react";
-import { useRouter } from "next/router";
-import { campaignsStub } from "../../stubs/campaignCard"; // Import your campaign data here
-import Layout from "@/components/Layout";
-import RecentDonationsSection from "@/components/RecentDonationsSection";
-import CommitmentsSection from "@/components/CommitmentsSection";
-import CharityProgressSection from "@/components/CharityProgressSection";
-import { DocumentReference, Timestamp } from "@firebase/firestore-types";
-import { Campaign, Commitment } from "@/types/charities";
+import React from 'react';
+import { useRouter } from 'next/router';
+import { campaignsStub } from '../../stubs/campaignCard'; // Import your campaign data here
+import Layout from '@/components/Layout';
+import RecentDonationsSection from '@/components/RecentDonationsSection';
+import CommitmentsSection from '@/components/CommitmentsSection';
+import CharityProgressSection from '@/components/CharityProgressSection';
+import { DocumentReference, Timestamp } from '@firebase/firestore-types';
+import { Campaign, Commitment } from '@/types/charities';
 
 interface CampaignProps {
   campaign: {
@@ -23,13 +23,12 @@ interface CampaignProps {
   };
 }
 
-
 const CampaignPage: React.FC<CampaignProps> = ({ campaign }) => {
   const router = useRouter();
 
-  const start = new Date(campaign.start)
-  const end = new Date(campaign.end)
-  
+  const start = new Date(campaign.start);
+  const end = new Date(campaign.end);
+
   const timeDifference = end.getTime() - start.getTime();
   const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 
@@ -66,7 +65,13 @@ const CampaignPage: React.FC<CampaignProps> = ({ campaign }) => {
           daysRemaining={daysRemaining}
           charity={campaign.charity}
         />
-        <RecentDonationsSection donations={[{"donor":"0x..111", "time":"5 Hours Ago", "amount":"1 MATIC"}, {"donor":"0x..354", "time":"1 Day Ago", "amount":"58.2 MATIC"}, {"donor":"0x..259", "time":"5 Days Ago", "amount":"0.001 MATIC"}]} />
+        <RecentDonationsSection
+          donations={[
+            { donor: '0x..111', time: '5 Hours Ago', amount: '1 MATIC' },
+            { donor: '0x..354', time: '1 Day Ago', amount: '58.2 MATIC' },
+            { donor: '0x..259', time: '5 Days Ago', amount: '0.001 MATIC' },
+          ]}
+        />
       </div>
     </Layout>
   );
@@ -75,55 +80,63 @@ const CampaignPage: React.FC<CampaignProps> = ({ campaign }) => {
 export async function getStaticPaths() {
   let campaigns;
 
-  const response = await fetch('/api/campaigns', {
-    method: 'GET'
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/campaigns`,
+    {
+      method: 'GET',
+    }
+  );
 
   campaigns = await response.json();
-  console.log("campaigns",campaigns)
+  console.log('campaigns', campaigns);
 
   for (let i = 0; i < campaigns.length; i++) {
     const campaign = campaigns[i];
-    console.log(campaign.commitment)
+    console.log(campaign.commitment);
   }
 
-
-
   const paths = campaigns.map((campaign: Campaign) => ({
-    params: { slug: campaign.title.replace(/\s+/g, "-").toLowerCase() },
+    params: { slug: campaign.title.replace(/\s+/g, '-').toLowerCase() },
   }));
 
   return { paths, fallback: true };
 }
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
-
   let campaigns;
 
-  const response = await fetch('/api/campaigns', {
-    method: 'GET'
-  });
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/campaigns`,
+      {
+        method: 'GET',
+      }
+    );
 
-  campaigns = await response.json();
-  console.log("campaigns",campaigns)
-  
-  const slug = params.slug;
-  const campaign = campaigns.find(
-    (campaign: Campaign) =>
-      campaign.title.replace(/\s+/g, "-").toLowerCase() === slug
-  );
+    campaigns = await response.json();
+    console.log('campaigns', campaigns);
 
-  if (!campaign) {
+    const slug = params.slug;
+    const campaign = campaigns.find(
+      (campaign: Campaign) =>
+        campaign.title.replace(/\s+/g, '-').toLowerCase() === slug
+    );
+
+    if (!campaign) {
+      return {
+        notFound: true,
+      };
+    }
+
     return {
-      notFound: true,
+      props: {
+        campaign,
+      },
     };
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return { paths: [], fallback: false };
   }
-
-  return {
-    props: {
-      campaign,
-    },
-  };
 }
 
 export default CampaignPage;
