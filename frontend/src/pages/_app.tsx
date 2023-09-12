@@ -2,7 +2,7 @@ import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
 
-export const runtime = "edge";
+export const runtime = "experimental-edge";
 
 export default function App({
   Component,
