@@ -41,7 +41,7 @@ export default async function handler(
 }
 
 type Campaign = {
-  id: string; // document ID
+  id: any; // document ID
   title: string;
   description: string;
   category: string;
@@ -114,7 +114,7 @@ export async function calculateCampaignAddress(id: any) {
   }
 }
 
-async function getCampaignInfo(id: string) {
+async function getCampaignInfo(id: any) {
   const campaignRef = doc(db, "campaigns", id);
   const campaignDoc = await getDoc(campaignRef);
   console.log(campaignDoc)

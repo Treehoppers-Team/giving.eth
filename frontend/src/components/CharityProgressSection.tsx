@@ -66,6 +66,8 @@ const CharityProgressSection: React.FC<CharityProgressSectionProps> = ({
         // Sign and send the transaction
         const txReceipt = await web3.eth.sendTransaction(transactionObject);
         console.log("Transaction Hash:", txReceipt.transactionHash);
+        alert("Transaction submitted successfully. Transaction Hash: " + txReceipt.transactionHash);
+        window.location.reload();
       } else {
         console.error("Ethereum provider (MetaMask) not found.");
       }
