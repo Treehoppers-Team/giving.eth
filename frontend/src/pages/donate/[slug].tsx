@@ -74,14 +74,8 @@ const CampaignPage: React.FC<CampaignProps> = ({ campaign }) => {
 };
 
 export async function getStaticPaths() {
-  let campaigns;
+  const campaigns = await getCampaigns();
 
-  const response = await fetch('/api/campaigns', {
-    method: 'GET'
-  });
-
-  campaigns = await response.json();
-  console.log("campaigns",campaigns)
 
   for (let i = 0; i < campaigns.length; i++) {
     const campaign = campaigns[i];
