@@ -28,6 +28,10 @@ interface CampaignProps {
 const CampaignPage: React.FC<CampaignProps> = ({ campaign }) => {
   const router = useRouter();
 
+  if (!campaign) {
+    return <div>Not found</div>;
+  }
+
   const start = new Date(campaign.start)
   const end = new Date(campaign.end)
   
@@ -95,7 +99,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
 
 
   const campaigns = await getCampaigns();
-
+  console.log("campaigns",campaigns)
   
   const slug = params.slug;
   const campaign = campaigns.find(
