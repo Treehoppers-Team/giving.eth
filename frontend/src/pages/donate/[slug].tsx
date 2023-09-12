@@ -8,6 +8,7 @@ import CommitmentsSection from "@/components/CommitmentsSection";
 import CharityProgressSection from "@/components/CharityProgressSection";
 import { DocumentReference, Timestamp } from "@firebase/firestore-types";
 import { Campaign, Commitment } from "@/types/charities";
+import { getCampaigns } from '../api/campaigns';
 
 interface CampaignProps {
   campaign: {
@@ -97,14 +98,9 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
 
-  let campaigns;
 
-  const response = await fetch('http://localhost:3000/api/campaigns', {
-    method: 'GET'
-  });
+  const campaigns = await getCampaigns();
 
-  campaigns = await response.json();
-  console.log("campaigns",campaigns)
   
   const slug = params.slug;
   const campaign = campaigns.find(
