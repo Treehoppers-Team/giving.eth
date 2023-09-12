@@ -75,7 +75,7 @@ const CampaignPage: React.FC<CampaignProps> = ({ campaign }) => {
 export async function getStaticPaths() {
   let campaigns;
 
-  const response = await fetch('http://localhost:3000/api/campaigns', {
+  const response = await fetch('/api/campaigns', {
     method: 'GET'
   });
 
@@ -100,7 +100,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
 
   let campaigns;
 
-  const response = await fetch('http://localhost:3000/api/campaigns', {
+  const response = await fetch('/api/campaigns', {
     method: 'GET'
   });
 
