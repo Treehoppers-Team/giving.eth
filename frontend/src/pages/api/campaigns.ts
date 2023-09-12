@@ -13,21 +13,10 @@ import {
   getFirestore,
 } from "firebase/firestore";
 import { calculateCampaignAddress } from "./donate"
+import { Commitment,Campaign } from "../../types/charities";
 
 const db = getFirestore(firebaseApp)
 
-type Campaign = {
-  id: string; // document ID
-  title: string;
-  description: string;
-  category: string;
-  start: Timestamp;
-  end: Timestamp;
-  targetAmount: Number;
-  currentAmount: Number;
-  commitment: Object[];
-  charity: DocumentReference;
-};
 
 export default async function handler(
   req: NextApiRequest,
