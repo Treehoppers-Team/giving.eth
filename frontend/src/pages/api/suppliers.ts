@@ -23,7 +23,7 @@ type Supplier = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Supplier[]>
+  res: NextApiResponse<Supplier[] | any>
 ) {
   try {
     if (req.method === "GET") {

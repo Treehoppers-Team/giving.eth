@@ -22,6 +22,7 @@ const ViewCampaignSegment = () => {
         {campaignsStub.map(
           ({ title, description, currentAmount, targetAmount }) => (
             <CharityCard
+              key={title}
               title={title}
               description={description}
               currentAmount={currentAmount}

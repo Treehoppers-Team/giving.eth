@@ -31,7 +31,7 @@ type Campaign = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Campaign[]>
+  res: NextApiResponse<Campaign[] | any>
 ) {
   try {
     if (req.method === "GET") {

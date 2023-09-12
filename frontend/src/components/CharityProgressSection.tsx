@@ -12,6 +12,7 @@ interface CharityProgressSectionProps {
   charity: string;
 }
 
+
 const CharityProgressSection: React.FC<CharityProgressSectionProps> = ({
   progressValue,
   currentAmount,
@@ -23,8 +24,8 @@ const CharityProgressSection: React.FC<CharityProgressSectionProps> = ({
   const { data: session } = useSession();
   const submitDefaultTransaction = async () => {
     try {
-      const web3 = new Web3(window.ethereum);
       if (window.ethereum) {
+        const web3 = new Web3(window.ethereum);
         await window.ethereum.request({ method: "eth_requestAccounts" });
 
         // Get the user's Ethereum account

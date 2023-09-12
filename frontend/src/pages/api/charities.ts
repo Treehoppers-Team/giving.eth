@@ -24,7 +24,7 @@ type Charity = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Charity[]>
+  res: NextApiResponse<Charity[] | any>
 ) {
   try {
     if (req.method === "GET") {

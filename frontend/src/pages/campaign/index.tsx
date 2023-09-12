@@ -36,6 +36,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().nonempty({ message: "Campaign name is required" }),
@@ -67,8 +68,8 @@ const formSchema = z.object({
     ),
 });
 
-const index = () => {
-  const [categoryIsOpen, setCategoryOpen] = React.useState(false);
+const Index = () => {
+  const [categoryIsOpen, setCategoryOpen] = useState(false);
   // form definition
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -83,7 +84,7 @@ const index = () => {
     mode: "all",
   });
 
-  const [supplierIsOpen, setSupplierOpen] = React.useState(
+  const [supplierIsOpen, setSupplierOpen] = useState(
     Array(1).fill(false) // Initialize with the first supplier
   );
 
@@ -168,7 +169,7 @@ const index = () => {
                         />
                       </FormControl>
                       <FormDescription>
-                        Your organisation's registered name.
+                        Your organisation&apos;s registered name.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -233,7 +234,7 @@ const index = () => {
                         </PopoverContent>
                       </Popover>
                       <FormDescription>
-                        Your organisation's impact domain
+                        Your organisation&apos;s impact domain
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -456,4 +457,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

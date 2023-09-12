@@ -44,7 +44,7 @@ const formSchema = z.object({
   category: z.string().nonempty({ message: 'Category is required' }),
 });
 
-const index = () => {
+const Index = () => {
   const [isKycCompleted, setKycCompleted] = useState(false);
   const [categoryIsOpen, setCategoryOpen] = useState(false);
 
@@ -131,7 +131,7 @@ const index = () => {
                           <Input placeholder="Dreams Collective" {...field} />
                         </FormControl>
                         <FormDescription>
-                          Your organisation's registered name.
+                          Your organisation&apos;s registered name.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -211,7 +211,7 @@ const index = () => {
                           </PopoverContent>
                         </Popover>
                         <FormDescription>
-                          Your organisation's impact domain
+                          Your organisation&apos;s impact domain
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -281,4 +281,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

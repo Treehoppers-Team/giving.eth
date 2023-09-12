@@ -26,13 +26,25 @@ const db = getFirestore(firebaseApp);
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<any>
 ) {
   try {
     if (req.method === "GET") {
-      const { id } = req.query;
-      const response = await getCampaignInfo(id);
-      res.status(200).json(response);
+      const id = req.query.id; // Extract the id parameter
+    
+      if (typeof id === "string") {
+        // Check if id is a string
+        try {
+          const response = await getCampaignInfo(id);
+          res.status(200).json(response);
+        } catch (error) {
+          // Handle errors from getCampaignInfo
+          res.status(500).json({ error: "Internal Server Error" });
+        }
+      } else {
+        // Handle the case where id is undefined or an array
+        res.status(400).json({ error: "Invalid id parameter" });
+      }
     }
   } catch (error) {
     console.error("Error fetching campaigns:", error);
