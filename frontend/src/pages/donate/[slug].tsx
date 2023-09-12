@@ -8,6 +8,7 @@ import CommitmentsSection from "@/components/CommitmentsSection";
 import CharityProgressSection from "@/components/CharityProgressSection";
 import { DocumentReference, Timestamp } from "@firebase/firestore-types";
 import { Campaign, Commitment } from "@/types/charities";
+import { getCampaigns } from '../api/campaigns';
 
 interface CampaignProps {
   campaign: {
@@ -26,6 +27,10 @@ interface CampaignProps {
 
 const CampaignPage: React.FC<CampaignProps> = ({ campaign }) => {
   const router = useRouter();
+
+  if (!campaign) {
+    return <div>Not found</div>;
+  }
 
   const start = new Date(campaign.start)
   const end = new Date(campaign.end)
@@ -73,14 +78,8 @@ const CampaignPage: React.FC<CampaignProps> = ({ campaign }) => {
 };
 
 export async function getStaticPaths() {
-  let campaigns;
+  const campaigns = await getCampaigns();
 
-  const response = await fetch('/api/campaigns', {
-    method: 'GET'
-  });
-
-  campaigns = await response.json();
-  console.log("campaigns",campaigns)
 
   for (let i = 0; i < campaigns.length; i++) {
     const campaign = campaigns[i];
@@ -98,13 +97,8 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
 
-  let campaigns;
 
-  const response = await fetch('/api/campaigns', {
-    method: 'GET'
-  });
-
-  campaigns = await response.json();
+  const campaigns = await getCampaigns();
   console.log("campaigns",campaigns)
   
   const slug = params.slug;
