@@ -50,7 +50,7 @@ export default function Home({ campaigns }: ExploreCampaignsSegmentProps) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
 
 
   const campaigns = await getCampaigns();
