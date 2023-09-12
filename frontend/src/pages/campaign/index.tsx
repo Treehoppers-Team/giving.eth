@@ -264,7 +264,6 @@ const Index = () => {
                         <Input
                           placeholder="Enter campaign description"
                           {...field}
-                          multiline // If you want a multiline input
                         />
                       </FormControl>
                       <FormMessage />
