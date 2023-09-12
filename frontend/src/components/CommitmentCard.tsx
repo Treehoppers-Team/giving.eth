@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "./ui/button";
 import { suppliersStub } from "@/stubs/suppliers";
@@ -12,11 +12,21 @@ interface CommitmentCardProps {
 const CommitmentCard: React.FC<CommitmentCardProps> = ({
   supplier,
   percentage,
-  fulfilled,
+  fulfilled: initialFulfilled,
 }) => {
+  const [fulfilled, setFulfilled] = useState(initialFulfilled);
   const bgColor = fulfilled ? "bg-[#bdf1c3]" : "bg-[#f2a4a4]";
   const borderStyle = "border-none"; // Add this to remove the border
   const opacity = fulfilled ? "opacity-100" : "opacity-80"; // Adjust opacity as needed
+
+
+  const toggleFulfilled = () => {
+    setTimeout(() => {
+      // After 2 seconds, toggle the fulfilled state
+      setFulfilled((prevFulfilled) => !prevFulfilled);
+    }, 1000); // 2000 milliseconds (2 seconds)
+  };
+  
 
   for (let i = 0; i < suppliersStub.length; i++) {
     if (suppliersStub[i].value === supplier) {
@@ -35,7 +45,7 @@ const CommitmentCard: React.FC<CommitmentCardProps> = ({
         {/* <div className="text-lg font-semibold">
           {fulfilled === "true" ? "Fulfilled!" : "Not Fulfilled"}
         </div> */}
-        <Button>
+        <Button onClick={toggleFulfilled}>
           {fulfilled ? "Fulfilled!" : "Fulfill Now"}
         </Button>
       </div>
