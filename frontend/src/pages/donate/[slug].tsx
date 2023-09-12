@@ -6,6 +6,8 @@ import Layout from "@/components/Layout";
 import RecentDonationsSection from "@/components/RecentDonationsSection";
 import CommitmentsSection from "@/components/CommitmentsSection";
 import CharityProgressSection from "@/components/CharityProgressSection";
+import { DocumentReference, Timestamp } from "@firebase/firestore-types";
+import { Campaign, Commitment } from "@/types/charities";
 
 interface CampaignProps {
   campaign: {
@@ -13,13 +15,14 @@ interface CampaignProps {
     description: string;
     currentAmount: number;
     targetAmount: number;
-    commitment: string[];
+    commitment: Commitment[];
     charity: string;
     start: string;
     end: string;
     image: string;
   };
 }
+
 
 const CampaignPage: React.FC<CampaignProps> = ({ campaign }) => {
   const router = useRouter();
@@ -69,7 +72,23 @@ const CampaignPage: React.FC<CampaignProps> = ({ campaign }) => {
 };
 
 export async function getStaticPaths() {
-  const paths = campaignsStub.map((campaign) => ({
+  let campaigns;
+
+  const response = await fetch('http://localhost:3000/api/campaigns', {
+    method: 'GET'
+  });
+
+  campaigns = await response.json();
+  console.log("campaigns",campaigns)
+
+  for (let i = 0; i < campaigns.length; i++) {
+    const campaign = campaigns[i];
+    console.log(campaign.commitment)
+  }
+
+
+
+  const paths = campaigns.map((campaign: Campaign) => ({
     params: { slug: campaign.title.replace(/\s+/g, "-").toLowerCase() },
   }));
 
@@ -77,9 +96,19 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
+
+  let campaigns;
+
+  const response = await fetch('http://localhost:3000/api/campaigns', {
+    method: 'GET'
+  });
+
+  campaigns = await response.json();
+  console.log("campaigns",campaigns)
+  
   const slug = params.slug;
-  const campaign = campaignsStub.find(
-    (campaign) =>
+  const campaign = campaigns.find(
+    (campaign: Campaign) =>
       campaign.title.replace(/\s+/g, "-").toLowerCase() === slug
   );
 

@@ -93,13 +93,35 @@ const index = () => {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // console.log(values);
+
+    let inputCommitments = values.commitments.map((commitment) => {
+      return {
+        supplier: commitment.supplier,
+        percentage: commitment.percentage,
+        fulfilled: false,
+      };
+    })
+
+    let input = {
+      title: values.name,
+      category: values.category,
+      start: new Date(),
+      end: values.endDate,
+      description: values.description,
+      targetAmount: values.targetAmount,
+      currentAmount: 0,
+      commitment: inputCommitments,
+      charity: "charity",
+      image: "/donate.jpg",
+    }
+    
     try {
       const response = await fetch('/api/campaigns', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(input),
       });
   
       if (response.ok) {

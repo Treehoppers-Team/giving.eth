@@ -4,10 +4,17 @@ import CommitmentCard from '@/components/CommitmentCard';
 
 
 interface CommitmentsSectionProps {
-  commitment: any[];
+  commitment: Commitment[];
+}
+
+type Commitment = {
+  supplier: string;
+  percentage: string;
+  fulfilled?: boolean;
 }
 
 const CommitmentsSection: React.FC<CommitmentsSectionProps> = ({ commitment }) => {
+  console.log(commitment)
   return (
     <div>
       <h2 className="text-xl font-semibold mb-2">Commitments</h2>

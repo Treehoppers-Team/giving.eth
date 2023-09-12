@@ -1,11 +1,12 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "./ui/button";
+import { suppliersStub } from "@/stubs/suppliers";
 
 interface CommitmentCardProps {
   supplier: string;
   percentage: string;
-  fulfilled: string;
+  fulfilled?: boolean;
 }
 
 const CommitmentCard: React.FC<CommitmentCardProps> = ({
@@ -13,9 +14,15 @@ const CommitmentCard: React.FC<CommitmentCardProps> = ({
   percentage,
   fulfilled,
 }) => {
-  const bgColor = fulfilled === "true" ? "bg-[#bdf1c3]" : "bg-[#f2a4a4]";
+  const bgColor = fulfilled ? "bg-[#bdf1c3]" : "bg-[#f2a4a4]";
   const borderStyle = "border-none"; // Add this to remove the border
-  const opacity = fulfilled === "true" ? "opacity-100" : "opacity-80"; // Adjust opacity as needed
+  const opacity = fulfilled ? "opacity-100" : "opacity-80"; // Adjust opacity as needed
+
+  for (let i = 0; i < suppliersStub.length; i++) {
+    if (suppliersStub[i].value === supplier) {
+      supplier = suppliersStub[i].label;
+    }
+  }
 
   return (
     <Card
@@ -29,7 +36,7 @@ const CommitmentCard: React.FC<CommitmentCardProps> = ({
           {fulfilled === "true" ? "Fulfilled!" : "Not Fulfilled"}
         </div> */}
         <Button>
-          {fulfilled === "true" ? "Fulfilled!" : "Fulfill Now"}
+          {fulfilled ? "Fulfilled!" : "Fulfill Now"}
         </Button>
       </div>
     </Card>
