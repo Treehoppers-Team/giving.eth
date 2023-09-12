@@ -59,7 +59,7 @@ const CampaignPage: React.FC<CampaignProps> = ({ campaign }) => {
 
       <div className="w-1/3 p-6 mt-8">
         <CharityProgressSection
-          id = {campaign.id}
+          // id = {campaign.id}
           progressValue={progressValue}
           currentAmount={campaign.currentAmount}
           targetAmount={campaign.targetAmount}
