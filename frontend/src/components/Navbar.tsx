@@ -23,6 +23,13 @@ const Navbar: React.FC = () => {
   const router = useRouter();
   const { data: session } = useSession();
 
+  // web3
+  const [web3, setWeb3] = useState<any>(null); // Web3 instance
+  const [account, setAccount] = useState<string | null>(null); // User's Ethereum account
+
+  // Dropdown state
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const handleNavigateToProfile = (e: React.MouseEvent) => {
     router.push("/profile");
   };
@@ -77,18 +84,6 @@ const Navbar: React.FC = () => {
     }
   }, [session]);
 
-  // web3
-  const [web3, setWeb3] = useState<any>(null); // Web3 instance
-  const [account, setAccount] = useState<string | null>(null); // User's Ethereum account
-
-  // Dropdown state
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  // Initialize Web3 when the component mounts
-  useEffect(() => {
-    initWeb3();
-  }, []);
-
   // Handle MetaMask connection
   const handleConnectMetaMask = async () => {
     if (!web3) {
@@ -96,7 +91,6 @@ const Navbar: React.FC = () => {
       initWeb3();
       return;
     }
-  
 
     try {
       // Request access to MetaMask wallet
@@ -134,7 +128,7 @@ const Navbar: React.FC = () => {
         {account && !session ? (
           <div className="relative">
             <Button variant="outline" onClick={toggleDropdown}>
-              Connected: {account.substring(0, 5)}
+              Connected: {account.substring(0, 5)}...
             </Button>
             {isDropdownOpen && (
               <DropdownMenu>
@@ -174,7 +168,9 @@ const Navbar: React.FC = () => {
                 <DropdownMenuItem onClick={handleNavigateToProfile}>
                   Campaigns
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
+                  Logout
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
