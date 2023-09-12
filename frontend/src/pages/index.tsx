@@ -6,6 +6,7 @@ import CharityCard from '@/components/CharityCard';
 import { Timestamp, DocumentReference } from '@firebase/firestore-types';
 import { Campaign, Commitment } from "@/types/charities";
 const inter = Inter({ subsets: ['latin'] });
+import { campaignsStub } from '@/stubs/campaignCard';
 
 
 interface ExploreCampaignsSegmentProps {
@@ -49,18 +50,18 @@ export default function Home({ campaigns }: ExploreCampaignsSegmentProps) {
 }
 
 export async function getStaticProps() {
-  let campaigns;
+  // let campaigns;
 
-  const response = await fetch('/api/campaigns', {
-    method: 'GET'
-  });
+  // const response = await fetch('/api/campaigns', {
+  //   method: 'GET'
+  // });
 
-  campaigns = await response.json();
-  console.log("campaigns",campaigns)
+  // campaigns = await response.json();
+  // console.log("campaigns",campaigns)
 
   return {
     props: {
-      campaigns,
+      campaignsStub,
     },
   };
 }
