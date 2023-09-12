@@ -57,7 +57,7 @@ export default async function handler(
   }
 }
 
-async function getCampaigns() {
+export async function getCampaigns() {
   const campaignsCollection = collection(db, "campaigns");
   const campaignSnapshot = await getDocs(campaignsCollection);
   const campaigns: Campaign[] = [];
