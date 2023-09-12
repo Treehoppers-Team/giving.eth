@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from 'next/router'; // Import useRouter from Next.js
 import { cn } from "@/lib/utils";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -100,7 +101,7 @@ const index = () => {
         percentage: commitment.percentage,
         fulfilled: false,
       };
-    })
+    });
 
     let input = {
       title: values.name,
@@ -113,37 +114,38 @@ const index = () => {
       commitment: inputCommitments,
       charity: "charity",
       image: "/donate.jpg",
-    }
-    
+    };
+
     try {
-      const response = await fetch('/api/campaigns', {
-        method: 'POST',
+      const response = await fetch("/api/campaigns", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(input),
       });
-  
+
       if (response.ok) {
         const newCampaign = await response.json();
-        console.log('Campaign created successfully:', newCampaign);
+        console.log("Campaign created successfully:", newCampaign);
         // You can redirect the user or perform any other actions here
       } else {
         const errorData = await response.json();
-        console.error('Error creating campaign:', errorData);
+        console.error("Error creating campaign:", errorData);
         // Handle the error, display a message to the user, etc.
       }
     } catch (error) {
-      console.error('An error occurred:', error);
+      console.error("An error occurred:", error);
       // Handle network errors or other exceptions here
     }
   }
-  
+
   // function onSubmit(values: z.infer<typeof formSchema>) {
 
   //   // submit to nextjs api route
-    
+
   // }
+  const router = useRouter(); // Initialize the useRouter hook
 
   return (
     <Layout>
@@ -251,13 +253,29 @@ const index = () => {
                     </FormItem>
                   )}
                 />
-
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter campaign description"
+                          {...field}
+                          multiline // If you want a multiline input
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="targetAmount"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Target Amount</FormLabel>
+                      <FormLabel>Target Amount (USD)</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -412,27 +430,24 @@ const index = () => {
                   Add Commitment
                 </Button>
               </div>
-                <Button
-                  type="submit"
-                  disabled={
-                    form.formState.isSubmitting
-                  }
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onSubmit(form.getValues());
-                  }}
-                >
-                  
-                  {form.formState.isSubmitting ? (
-                    <>
-                      <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                      <p>Please wait</p>
-                    </>
-                  ) : (
-                    <p>Submit</p>
-                  )}
-                  
-                </Button>
+              <Button
+                type="submit"
+                disabled={form.formState.isSubmitting}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onSubmit(form.getValues());
+                  router.push(`/`);
+                }}
+              >
+                {form.formState.isSubmitting ? (
+                  <>
+                    <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                    <p>Please wait</p>
+                  </>
+                ) : (
+                  <p>Submit</p>
+                )}
+              </Button>
             </form>
           </Form>
         </div>
