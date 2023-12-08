@@ -1,4 +1,16 @@
-# giving.eth
+<p align='center'>
+<img width="600" alt="image" src="https://github.com/crustyapples/giving.eth/assets/24990448/13fa18c8-d9b2-488a-9897-b694ad971e1f">
+</p>
+
+<h2 align="center">giving.eth</h2>
+
+<p align="center">
+    <a href="https://github.com/crustyapples/giving.eth/tree/main/frontend">Frontend</a>
+    |
+    <a href="https://github.com/crustyapples/giving.eth/tree/main/smart-contracts">Smart-Contracts</a>
+</p>
+
+
 ## Description
 giving.eth is a project that aims to increase trust and transparency between Charities and Donors. Through the use of Account Abstraction, Charities can easily be onboarded and represented by a contract address. And in the contract address, we can set pre determined rules in how the Charities can spend the funds. This aims to create a trustless relationship between Charities and Donors, and in turn promote more contributions towards reputable Charities within the Crypto community. This project was built for Ethereum Singapore Hackathon 2023. 
 <p align='center'>
